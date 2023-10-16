@@ -113,12 +113,13 @@ Simple "pure" functions are the simplest way to create a component in React. By 
 ```
 This function is a valid React component because it accepts a single property called "props" which is an object. These "function components" are literally just JavaScript functions.
 
-### Defining Class Components
-Class components provide you with some additional features you don't get when components with simple functions. One of the benefits is you get to use the [ES6 class syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes). This is nice especially for developers coming from languages that provide a similar structure to creating objects. You can create Class components [without ES6](https://reactjs.org/docs/react-without-es6.html) but I would only do that if you have a really specific use case.
+### Class Components
+Class components in react provide you with some additional features you don't get when components with simple functions without the use of hooks.Until hooks like `useEffect` and `useState` came about, use class components where the only way to gain access to some of the most powerful featurs in react components.
 
-Other benefits of Class components
-* **State** - This is why functional components are called stateless. Class components can maintain their own state. State is similar to props, but it is private and fully controlled by the component. State allows React components to change their output over time in response to user actions, network responses, and anything else, without having to modify props.
+Features of Class components
+* **State** - This is why functional components are were also called stateless before the `useState` hook gave us the ability to leverage statin in fumnctional components. Class components can maintain their own state. State is similar to props, but it is private and fully controlled by the component. State allows React components to change their output over time in response to user actions, network responses, and anything else, without having to modify props.
 * **Lifecycle Hooks** - Lifecycle hooks are methods provided to you through extending the React.Component class. They allow you to run code at various points in the lifecycle of the application. [componentDidMount()](https://reactjs.org/docs/react-component.html#componentdidmount) and [componentWillUnmount()](https://reactjs.org/docs/react-component.html#componentwillunmount) are some commonly used lifecycle hooks. Please follow the links to learn more about those and the other Lifecycle Hooks.
+We use the `useEffect` hook in function components in place of the lifecyle hooks available in class components.
 
 Both examples below are considered the same in React. The Class component allows you to leverage state and lifecycle hooks.
 ```javascript
@@ -173,65 +174,49 @@ Take some time to ***Learn On Your Own!*** out the [Spread Operator ...](https:/
 > NOTE: A Component must never modify its own props. React is pretty flexible but it has a single strict rule: **All React components must act like pure functions with respect to their props.**
 
 ## Working with State
-Like props, state is just a JavaScript object but state is created and managed within a component and not passed in as attributes when rendered through JSX. You should think of State as private to a component. Perhaps the most special thing about State is that a change/update to state will cause the application to re-render.
+State is created and managed within a component and not passed in as attributes when rendered through JSX like props. You should think of State as private to a component. Perhaps the most special thing about State is that a change/update to state will cause the application to re-render.
 
 [Further Reading](https://reactjs.org/docs/faq-state.html)
+[useState hook documentation](https://react.dev/reference/react/useState) 
 
-Setting the initial state of a component is usually needed when portions of your UI rely on values in state. This is done in the ```constructor()``` method of a stateful component.
+Putting data in the state of a component is usually needed when portions of your UI rely on values in state. This is done in the `constructor()` method of a class component or by using the `useState` hook in a function component.
 
 The start of a simple counter
 ```javascript
 
-class Counter extends React.Component {
+function Counter (props) {
 
     /*
-    Adding a constructor so we can set our initial state
+    using the useState hook to create our initial coung in state
     */
-    constructor(props){
-        //let the parent class do its thing with props
-        super(props);
+    const [count, setCount] = useState(initialState);
 
-        //setup the initial value for count in state
-        this.state = {
-            count: 0
-        }
-    }
-
-    //simple render method just displaying the count
-    render(){
-        return (
-            <div>
-                {this.state.count}
-            </div>
-        )
-    }
+    //return JSX diplaying the count
+    return (
+        <div>
+            {count}
+        </div>
+    )
 
 }
 
 ```
 
-> NOTE: The only time it is ok to use ```this.state = {...}``` to set state is in the constructor when setting initial state. To update state you should use the ```this.setState()``` method. This will make sure state gets updated properly and that the application re-renders.
+> NOTE: `useState` ruturns an array with 2 values. The first value is the current state which matches the `initialState` passed to `useState`. In this case `0`. The secont value is a set function used to update the value in state. We use a feature called destructing assigment to assign the  returned values to their own variables.
 
-If you review the comments in the code example above hopefully, you will come to the conclusion that this component will display ```0```. That's cool but it's not a counter. The point is we have a **State** with something in it called **count** and we are leveraging **this.state.count** in the statement returned from the ```render()``` method.
+If you review the comments in the code example above hopefully, you will come to the conclusion that this component will display ```0```. That's cool but it's not a counter. The point is we have a **State** with something in it called **count** and we are leveraging **count** in the JSX returned from the component.
 
 What if we want the counter to change? We would need to update our state. Since the value that is displayed for the counter is in state, we need to update its value in state. When we update its value in state it will cause our application to re-render.
 
-When updating state you must use ```this.setState()```
+When updating state you must use set function returned `useState`. In this case we wille be using `setCount`
 
 ```javascript
 
-    this.setState({
-        count: 10
-    })
+    setCount(10);
 
-    //use a callback function when updating state with from a value already in state
-    //https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous
-    this.setState((state, props)=>({
-        count: state.count + 1
-    }))
 ```
 
-But where and when do we call ```this.setState()```? We usually change state in response to some type of event. 
+But where and when do we call ```setCount()```? We usually change state in response to some type of event. 
 
 ## Event Handling
 Events can be lots of things. User interaction can trigger all types of events from mouse clicks to button clicks. We handle these events with Event Handlers. Event Handlers are typically methods on your Class (Stateful) Component. 
@@ -242,26 +227,20 @@ Take a look at what an **Event Handler** would look like on our Counter Componen
 
 ```javascript
 
-class Counter extends React.Component {
-
-    ...
+function Counter (props) {
 
     //new increment handler to update state 
     //setting count to be 1 greater than it's previous value
     incrementHandler = (event) => {
-        this.setState((state, props)=>({
-            count: state.count + 1
-        }))
+        setCount(count + 1);
     }
 
-    //simple render method just displaying the count
-    render(){
-        return (
-            <div>
-                {this.state.count}
-            </div>
-        )
-    }
+    return (
+        <div>
+            {count}
+        </div>
+    )
+    
 
 }
 
@@ -271,62 +250,32 @@ Now that we have a handler for an event let's create an onClick event. We want t
 
 ```javascript
 
-class Counter extends React.Component {
+function Counter (props) {
 
-    ...
-
-    render(){
-        return (
-            <div>
-                {this.state.count}
-                {/* button with onClick that calls the incrementHandler method on this class */}
-                <button onClick={this.incrementHandler}>increment (+)</button>
-            </div>
-        )
+    incrementHandler = (event) => {
+        setCount(count + 1);
     }
+
+    return (
+        <div>
+            {count}
+            {/* button with onClick that calls the incrementHandler method on this class */}
+            <button onClick={incrementHandler}>increment (+)</button>
+        </div>
+    )
 
 }
 
 ```
 * When the **increment (+)** button is clicked it will call the ```incrementHandler()``` method.
-* The ```incrementHandler()``` is updating state using ```this.setState()``` updating the value of **count** in state by adding 1 to its current value.
-* Because state is updated the application will re-render and display the new value of ```this.state.count``` to the user. 
+* The ```incrementHandler()``` is updating state using `setCount()` updating the value of **count** in state by adding 1 to its current value.
+* Because state is updated the application will re-render and display the updated value of ```count``` to the user. 
 * This process is repeated with every press of the **increment (+)** button.
-
-What if we wanted our counter to go down when we press a **decrement (-)** button?
-
-```javascript
-
-class Counter extends React.Component {
-
-    ...
-
-    //new decrement handler to update state 
-    //setting count to be 1 less than it's previous value
-    decrementHandler = (event) => {
-        this.setState((state, props)=>({
-            count: state.count - 1
-        }))
-    }
-
-    render(){
-        return (
-            <div>
-                {/* button with onClick that calls the decrementHandler method on this class */}
-                <button onClick={this.decrementHandler}>decrement (+)</button>
-                {this.state.count}
-                ...
-            </div>
-        )
-    }
-
-}
-
-```
 
 # Class Exercise
 Take some time to complete the following tasks.
 * If you didn't build the counter during the lecture, go ahead and see if you can get the counter working
+* Create a decerment button that decreases the counter everytime it is clicked
 * Modify the functionality to not allow the counter to go below 0
 * Modify the functionality to not allow the counter to go above 20
 * Modify the functionality to change the color of the counter to red if it goes above 10
@@ -336,4 +285,3 @@ Take some time to complete the following tasks.
     * if an initial count is not passed in, the count should start at 0
 * Add a button to reset the counter to 0 or whatever the initial count was set to when passed in as a prop
 * Only show this button if the counter has been modified from its original state.
-
