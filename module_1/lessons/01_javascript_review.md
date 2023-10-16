@@ -5,7 +5,7 @@ JavaScript is an object-oriented computer programming language commonly used to 
 [JavaScript Basics](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics)  
 
 ***PRO TIP***  
-*https://developer.mozilla.org/en-US/docs/Web/API/Document/YOUR_METHOD_HERE - Replacing YOUR_METHOD_HERE with something like 'getElementByID', 'getElementsByClass', or any other method you can think of should bring you to documentation on that specific method* 
+*https://mdn.io/YOUR_METHOD_HERE - Replacing YOUR_METHOD_HERE with something like 'getElementByID', 'getElementsByClass', or any other method you can think of should bring you to documentation on that specific method* 
 
 ## Variables
 
