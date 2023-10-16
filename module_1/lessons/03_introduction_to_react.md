@@ -81,17 +81,24 @@ index.html
         <!-- element where application will be rendered -->
         <div id="root"></div>
         
-        <!-- inlcude react, react-dom, and babael standalone from their respective cdn -->
-        <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-        <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <!-- include React and ReactDOM -->
+        <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+        <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+        <!-- include Babel standalone so we can process JSX -->
+        <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    
         
         <!-- Render a JSX expression into the <div> with id="root" -->
         <script type="text/babel">
-            ReactDOM.render(
-                <div><h1>Hello, world!</h1></div>,
-                document.getElementById('root')
-            );
+
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            
+            root.render(
+                <div>
+                    <h1>Hello, world!</h1>
+                </div>
+            )
         </script>
     </body>
 
