@@ -238,7 +238,7 @@ function Counter (props) {
 
     //new increment handler to update state 
     //setting count to be 1 greater than it's previous value
-    incrementHandler = (event) => {
+    let incrementHandler = (event) => {
         setCount(count + 1);
     }
 
@@ -259,7 +259,7 @@ Now that we have a handler for an event let's create an onClick event. We want t
 
 function Counter (props) {
 
-    incrementHandler = (event) => {
+    let incrementHandler = (event) => {
         setCount(count + 1);
     }
 
