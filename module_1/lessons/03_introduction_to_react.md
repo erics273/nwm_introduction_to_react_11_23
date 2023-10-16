@@ -196,9 +196,9 @@ function Counter (props) {
     /*
     using the useState hook to create our initial coung in state
     */
-    const [count, setCount] = useState(initialState);
+    const [count, setCount] = React.useState(0);
 
-    //return JSX diplaying the count
+    //return JSX displaying the count
     return (
         <div>
             {count}
@@ -209,7 +209,7 @@ function Counter (props) {
 
 ```
 
-> NOTE: `useState` ruturns an array with 2 values. The first value is the current state which matches the `initialState` passed to `useState`. In this case `0`. The secont value is a set function used to update the value in state. We use a feature called destructing assigment to assign the  returned values to their own variables.
+> NOTE: `useState` returns an array with 2 values. The first value is the current state which matches the `initialState` passed to `useState`. In this case `0`. The second value is a set function used to update the value in state. We use a feature called destructing assignment to assign the  returned values to their own variables.
 
 If you review the comments in the code example above hopefully, you will come to the conclusion that this component will display ```0```. That's cool but it's not a counter. The point is we have a **State** with something in it called **count** and we are leveraging **count** in the JSX returned from the component.
 
