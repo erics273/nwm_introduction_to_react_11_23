@@ -144,9 +144,9 @@ You should now see your Navigation component and be able to click the links to d
 
 * Create a new route that renders the `<Welcome/>` component.
     * The URL path should be /welcome/:name. **:name** represents dynamic data passed in via the URL.
-        * This data gets added to a `match.params` object that is passed as a prop to the component the Route renders
-        * You would access the route with a URL like **/welcome/eric**. You can access the variable with `props.match.params.name` within the component.
+        * This data is accessed through the `useParams` hook that can be imported from react-router-dom. [useParams() docs](https://reactrouter.com/en/main/hooks/use-params)
+        * You would access the route with a URL like **/welcome/eric**.
     * If the `<Welcome/>` component is accessed through this URL it should display the dynamic name from the URL
     * If the `<Welcome/>` component is accessed through "/" route it should maintain its original behavior and display the value passed in with the "name" prop
 * Update the Router functionality to show a 404 component when there is no matching route for the URL specified
-    * [Switch Reference](https://reacttraining.com/react-router/web/api/Switch)
+    * [Example](https://blog.logrocket.com/react-router-v6-guide/#implementing-404-view)
