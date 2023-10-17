@@ -128,7 +128,7 @@ Add `<Clock />` to include our stateful clock component. App.js should now look 
 
 import Welcome from './components/welcome/Welcome';
 
-//import the new clock componenet
+//import the new clock component
 import Clock from './components/clock/Clock'
 
 function App() {
@@ -144,7 +144,7 @@ export default App;
 ```
 
 ## Create The Contact Component
-The following example will show how to make a stateful component that deals with user input. We will set up the form using "controlled components". Form elements such as `<input>`, `<textarea>`, and `<select>` maintain their own state and update it based on user input. An example of this is that they can remember what is entered by the user.
+The following example will show how to make a component that deals with user input. We will set up the form using "controlled components". Form elements such as `<input>`, `<textarea>`, and `<select>` maintain their own state and update it based on user input. An example of this is that they can remember what is entered by the user.
 
 We would want React state to be the “single source of truth” instead of having to grab what was entered directly from the form. An input form element whose value is controlled by React in this way is called a “controlled component”.
 
@@ -153,155 +153,105 @@ Using controlled components is optional. Read the following for more information
 [When To Use Refs](https://reactjs.org/docs/refs-and-the-dom.html)
 
 1. Within *src/components*, create a directory called *contact*.
-2. Within *src/components/contact*, create *contact.js*.
-
-Your project structure should now be as follows:
-```
-react-demo-app
-├── README.md
-├── node_modules
-├── package.json
-├── .gitignore
-├── public
-│   └── favicon.ico
-│   └── index.html
-│   └── manifest.json
-└── src
-	└── components
-    │   └── welcome
-    │       └── welcome.js
-    |   └── clock
-    │       └── clock.js
-    |   └── contact
-    │       └── contact.js
-    └── App.css
-    └── App.js
-    └── App.test.js
-    └── index.css
-    └── index.js
-    └── logo.svg
-    └── registerServiceWorker.js
-```
+2. Within *src/components/contact*, create *Contact.js*.
 
 **Add the following code to contact.js**
 
 ```javascript
-import React, { Component } from 'react';
+import { useState } from "react";
 
-class Contact extends Component {
-  
-    constructor(props) {
-        super(props);
-        this.state = { 
-            submitted: false, 
-            formData: {
-                firstName: "",
-                lastName: "",
-                email: ""
-            }
-        }
-    }
+function Contact () {
 
-    handleChange = (event) => {
-        let formData = this.state.formData;
+    let [submitted, setSubmitted] = useState(false);
+
+    let [formData, setFormData] = useState({
+        firstName: "",
+        lastName: ""
+    })
+
+    let handleChange = (event) => {
         formData[event.target.name] = event.target.value;
-        this.setState({formData});
+        setFormData({...formData});
     }
 
-    handleSubmit = (event) => {
+    let handleSubmit = (event) => {
         event.preventDefault();
-        this.setState({
-            submitted: true
-        })
+        setSubmitted(true);
     }
 
-    resetForm = (event) => {
-        this.setState({
-            submitted: false,
-            formData: {
-                firstName: "",
-                lastName: "",
-                email: ""
-            }
+    let resetForm = (event) => {
+        setFormData({
+            firstName: "",
+            lastName: ""
         })
+	setSubmitted(false);
     }
 
-    render() {
 
-        //show the thank you message if the form has been submitted
-        if(this.state.submitted){
-            return (
-                <div>
-                    Thank you, {this.state.formData.firstName}, for submitting the form <br/>
-                    <button onClick={this.resetForm}>Reset Form</button>
-                </div>
-            )
-        }
+    //show the thank you message if the form has been submitted
+    if(submitted){
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
-                    <div>
-                        <label>First Name:</label>
-                        <input onChange={this.handleChange} type="text" name="firstName" value={this.state.formData.firstName} />
-                    </div>
-                    <div>
-                        <label>Last Name:</label>
-                        <input onChange={this.handleChange} type="text" name="lastName" value={this.state.formData.lastName} />
-                    </div>
-                    <button>Submit Form</button> <br/>
-                    {this.state.formData.firstName}
-                    <br/>
-                    {this.state.formData.lastName}
-                </form>
+                Thank you, {formData.firstName}, for submitting the form <br/>
+                <button onClick={resetForm}>Reset Form</button>
             </div>
-        );
+        )
     }
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>First Name:</label>
+                    <input onChange={handleChange} type="text" name="firstName" value={formData.firstName} />
+                </div>
+                <div>
+                    <label>Last Name:</label>
+                    <input onChange={handleChange} type="text" name="lastName" value={formData.lastName} />
+                </div>
+                <button>Submit Form</button> <br/>
+
+                <hr />
+                {JSON.stringify(formData)}
+            </form>
+        </div>
+    );
 }
 export default Contact;
 ```
 
 Now, let's walk through our new Contact component and discuss what is happening.
 
-- **The initial state** -  here we are setting submitted to false which will be used for conditional rendering of the thank you page. we also set up the formData object that will be the source of truth for the data in the form.
+- **The initial state** -  here we are setting submitted to false which will be used for conditional rendering of the thank you page. We also set formData to an object that will be the source of truth for the data in the form.
   ```javascript
-    this.state = { 
-      submitted: false, 
-      formData: {
-          firstName: "",
-          lastName: "",
-          email: ""
-      }
-    }
+    let [submitted, setSubmitted] = useState(false);
+
+    let [formData, setFormData] = useState({
+        firstName: "",
+        lastName: ""
+    })
   ```
 
 - `handleChange` - This method is responsible for keeping the form in sync with the formData object in state. It is called when the **onChange** event is triggered on the input fields.
 ```javascript
 
-  handleChange = (event) => {
-      //since this.setState only does a shallow merge we are going to create a new object from the related object in state
-      //this will allow us to make sure we don't lose data when calling setState method
-      let newFormData = this.state.formData;
+   let handleChange = (event) => {
+	//update the value of this changed form field in the formData object
+        formData[event.target.name] = event.target.value;
 
-      //update the specific field in our new object
-      newFormData[event.target.name] = event.target.value;
-
-      //update the formData object in state with the new 
-      this.setState({formData: newFormData});
-  }
+	//destructure formData into a new object and update formData in state with the new object
+        setFormData({...formData});
+    }
 
 ```
 
 - `handleSubmit` - This method is responsible for what happens when the form is submitted. It is run when the **onSubmit** event is triggered on the form. We use the `preventDefault()` method to prevent the form from refreshing the page when submitted.
 ```javascript
 
-   handleSubmit = (event) => {
-        //prevent the form submission from reloading the page
+   let handleSubmit = (event) => {
+	//prevent the default behavior of a form to prevent the page from refreshing
         event.preventDefault();
-        //update state to reflect the form submission
-        //we leverage this in the render method to show the thank you page instead of the form
-        this.setState({
-            submitted: true
-        })
+	//update submitted to true to trigger rendering of the thank you message
+        setSubmitted(true);
     }
 
 ```
@@ -309,50 +259,35 @@ Now, let's walk through our new Contact component and discuss what is happening.
 - `resetForm` - This method clears our form by resetting the values in state. It is run when the **onClick** event is triggered on the reset button
 ```javascript
 
-   resetForm = (event) => {
-      this.setState({
-          submitted: false,
-          formData: {
-              firstName: "",
-              lastName: "",
-              email: ""
-          }
-      }
-   }
+   let resetForm = (event) => {
+        setFormData({
+            firstName: "",
+            lastName: ""
+        })
+	setSubmitted(false);
+    }
 
 ```
 
 ### Include the Contact component in App.js
 
-Add `<Contact />` to include our stateful Contact component. App.js should now look similar to the following code sample:
+Import our Contact component. App.js should now look similar to the following code sample:
 
 ```javascript
 
- //*** Import the Welcome component ***//
-import Contact from './components/clock/clock';
+import Welcome from './components/welcome/Welcome';
+import Clock from './components/clock/Clock'
+import Contact from './components/contact/Contact';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-
-          <Welcome name="Eric" />
-
-          <Clock />
-
-           {/* Added the Contact component here. */}
-          <Contact />
-
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div className="App">
+      <Welcome name="eric" />
+      <Clock/>
+      <Contact/>
+    </div>
+  );
 }
+
 export default App;
 ```
