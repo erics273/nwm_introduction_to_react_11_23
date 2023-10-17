@@ -12,47 +12,19 @@ First, we will need to scaffold our project using create-react
 
 * Then open the react-demo-app project folder created in VSCode or your editor of choice
 
-## Create The Stateless Welcome Component
-The following example demonstrates how to create a simple stateless component that relies on 1 "prop" and then how to include that component in our application.
+## Create A Welcome Component
+The following example demonstrates how to create a simple component that relies on 1 "prop" and then how to include that component in our application.
 
 > Always start component names with a capital letter.
 For example, `<div />` represents a DOM tag, but `<Welcome />` represents a component in JSX.
 
 1. Within the *src* directory, create a new directory called *components*
 2. Within *src/components*, create a directory called *welcome*.
-3. Within *src/components/welcome*, create *welcome.js*
+3. Within *src/components/welcome*, create *Welcome.js*
 
-Your project structure should have been altered as follows. Note that *src* now contains a sub-directory with component files:
-
-```
-react-clock
-├── README.md
-├── node_modules
-├── package.json
-├── .gitignore
-├── public
-│   └── favicon.ico
-│   └── index.html
-│   └── manifest.json
-└── src
-	└── components
-    │   └── welcome
-    │       └── welcome.js
-    └── App.css
-    └── App.js
-    └── App.test.js
-    └── index.css
-    └── index.js
-    └── logo.svg
-    └── registerServiceWorker.js
-```
-
-### welcome.js
+### Welcome.js
 
 ```javascript
-/*** Copy this code block to Welcome.js ***/
-
-import React from 'react';
 
 function Welcome(props) {
 
@@ -66,53 +38,37 @@ function Welcome(props) {
 export default Welcome;
 ```
 
-- The first line of code imports React so we can use JSX. Read more about [imports](https://stackoverflow.com/questions/36795819/when-should-i-use-curly-braces-for-es6-import/36796281#36796281)
 - To create the `Welcome` component, we create a simple JavaScript function that takes "props" as its argument. Whenever a component is rendered, the application will render the returned JSX expression.
-- Notice the line that includes **{props.name}**? That will get replaced with the "name" prop passed into the component.
+- Notice the line that includes **{props.name}**? That will be replaced with the value of the "name" prop passed into the component.
 
 ## Including the Welcome Component in the main component, App.js
 We want to use our welcome component to greet our visitors. Let's include our component in the App.js where we would like it to display
 
 1. Import the Welcome component at the top of `App.js`
   ```javascript
-  import Welcome from './components/welcome/welcome';
+  import Welcome from './components/welcome/Welcome';
   ```
 
-2. Add the Welcome component where we want it to show and set the name property. The Welcome component consumes the name property and then output using **{this.props.name}**. The name attribute becomes the value of this.props.name inside our component.
+2. Add the Welcome component where we want it to show up and then set the name property. The Welcome component consumes the name property and then outputs the name using **{props.name}**. 
+  
   ```javascript
   <Welcome name="Eric" />
   ```
 
 3. Review App.js to make sure that you've imported the Welcome component and that the Component has been added to the render function.
 
-  Your code should look similar to the following
+  Your code should look similar to the following after removing the demo content and adding the Welcome component
   ```javascript
-  import React, { Component } from 'react';
-  import logo from './logo.svg';
-  import './App.css';
+  import Welcome from './components/welcome/Welcome';
 
-  //*** Import the Welcome component ***//
-  import Welcome from './components/welcome/welcome';
-
-  class App extends Component {
-    render() {
-      return (
-        <div className="App">
-          <div className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-
-            {/* Adding the Welcome component and passing the value "Eric" to the "name" prop */}
-            <Welcome name="Eric" />
-
-            <h2>Welcome to React</h2>
-          </div>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-        </div>
-      );
-    }
+  function App() {
+    return (
+      <div className="App">
+        <Welcome name="eric" />
+      </div>
+    );
   }
+
   export default App;
   ```
 
