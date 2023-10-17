@@ -72,84 +72,53 @@ We want to use our welcome component to greet our visitors. Let's include our co
   export default App;
   ```
 
-## Create The Clock Component
-The following example will show how to make a stateful component that leverages state and lifecycle hooks. In order to have a stateful component the component has to be created as a class and the class must extend the base React.Component class. The class must also include a render method.
+## Create A Clock Component
+The following example will show how to make a clock component that leverages state. In order to have a stateful component the component has to be created as a class and the class must extend the base React.Component class. The class must also include a render method.
 
 State is similar to props, but it is private and fully controlled by the component. To demonstrate this behavior we will steal an example from the React documentation and add a clock to our website. To begin, we'll add the files necessary for a Clock component.
 
 1. Within *src/components*, create a directory called *clock*.
-2. Within *src/components/clock*, create *clock.js*.
-
-Your project structure should now be as follows:
-```
-react-demo-app
-├── README.md
-├── node_modules
-├── package.json
-├── .gitignore
-├── public
-│   └── favicon.ico
-│   └── index.html
-│   └── manifest.json
-└── src
-	└── components
-    │   └── welcome
-    │       └── welcome.js
-    |   └── clock
-    │       └── clock.js
-    └── App.css
-    └── App.js
-    └── App.test.js
-    └── index.css
-    └── index.js
-    └── logo.svg
-    └── registerServiceWorker.js
-```
+2. Within *src/components/clock*, create *Clock.js*.
 
 **Add the following code to clock.js**
 
 ```javascript
-import React, { Component } from 'react';
+import { useEffect, useState } from "react";
 
-class Clock extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {date: new Date()};
-  }
-  componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
-  }
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-  tick() {
-    this.setState({
-      date: new Date()
-    });
-  }
-  render() {
+function Clock(props){
+
+    let [date, setDate] = useState(new Date());
+
+    useEffect(()=>{
+        let timerID = setInterval( () => tick(), 1000 );
+        
+        return () => {
+            clearInterval(timerID);
+        }
+    },[])
+
+    let tick = () => {
+        setDate(new Date());
+    }
+
     return (
-      <div>
-        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
-      </div>
-    );
-  }
+        <div>
+          <h2>It is {date.toLocaleTimeString()}.</h2>
+        </div>
+      );
+
 }
+
 export default Clock;
 ```
 
 Now, let's walk through our new Clock component and discuss all of the class methods we've added.
 
-- `constructor()` - By overriding the constructor, we are now able to set the initial state for our component. We are calling `super(props)` to call the parent class constructor and maintain the original behavior of all components. We then set some initial properties to `this.state`. `this.state` is accessible throughout our component, including the render function and represents the local state of the component.
+- `useState()` - By overriding the `useState` hook, we are now able to set the initial date for our component and have a function that allows us to update its value.
 
-      **NOTE: Class components should always call the base constructor with props.**
+- `useEffect()` -  This hook allows us to run code when the component renders or mounts in the DOM. This makes it a perfect spot to kick off the timer. If the Clock component is ever removed from the DOM, React calls the cleanup function returned by the `useEffect` hook, which stops the timer.
 
-- `componentDidMount()` and `componentWillUnmount()` -  These two methods are part of the lifecycle of a React Component. The `componentDidMount()` hook runs after the component output has been rendered to the DOM. This makes it a perfect spot to kick off the timer. If the Clock component is ever removed from the DOM, React calls the `componentWillUnmount()` lifecycle hook, so the timer is stopped.
-
-- `tick()` - This method updates the date stored in `this.state` and is run by `setInterval()` to get a new date every second. Notice that the state isn't set directly. Instead, `tick()` uses `this.setState()` to update the `date` property of the state object. You should always (with the odd rare exception) use `this.setState()` to update the component state. 
+- `tick()` - This method updates the date stored in `date` using `setDate` and is run by `setInterval()` to get a new date every second. 
 
 ### Include the Clock component in App.js
 
@@ -157,30 +126,20 @@ Add `<Clock />` to include our stateful clock component. App.js should now look 
 
 ```javascript
 
- //*** Import the Welcome component ***//
-import Clock from './components/clock/clock';
+import Welcome from './components/welcome/Welcome';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
+//import the new clock componenet
+import Clock from './components/clock/Clock'
 
-          <Welcome name="Eric" />
-
-          {/* Added the clock component here.Clock doesn't require any props. It manages everything with it's internal state */}
-          <Clock />
-
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div className="App">
+      <Welcome name="eric" />
+      <Clock/>
+    </div>
+  );
 }
+
 export default App;
 ```
 
