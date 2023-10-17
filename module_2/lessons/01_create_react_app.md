@@ -1,11 +1,11 @@
 # create-react-app
 
-React can take some time to wire up from scratch. To alleviate some of the work of getting an application off the ground we'll use a command-line tool to carry the burden for us. `create-react-app` is a tool to scaffold out React applications quickly. It will stand up a project structure and will also install and configure the most common development tools utilized in most React applications. 
+React can take some time to wire up from scratch. To alleviate some of the work of getting an application off the ground we'll use a command-line tool to carry the burden for us. `create-react-app` is a tool to scaffold out React applications quickly. It will set up a project structure and will also install and configure the most common development tools utilized in most React applications. 
 
 Tools like `create-react-app` are the easiest way to get a new React project up and running without spending time on configuration.
 
 ## What you get
-Scaffolding a project with **create-react-app** comes with a lot of opinions and should provide you with what you need to build a production-ready React application as well as provide a full-featured development environment. Here are features included:
+Scaffolding a project with **create-react-app** comes with a lot of opinions and should provide you with what you need to build a production-ready React application as well as provide a full-featured development environment. Here are the features included:
 
 * React, JSX, ES6, TypeScript, and Flow syntax support.
 * Language extras beyond ES6 like the object spread operator.  
@@ -16,7 +16,7 @@ Scaffolding a project with **create-react-app** comes with a lot of opinions and
 * A build script to bundle JS, CSS, and images for production, with hashes and sourcemaps.
 * An offline-first service worker and a web app manifest, meeting all the Progressive Web App criteria.
 
-These many opinions mean that these tools are preconfigured to work in a specific way. If your project needs more customization, you can "eject" and customize it, but then you will need to maintain this configuration. ```npm run eject``` will expose the configuration for you to customize. Once this is done,  all of the commands except eject will still work.
+These many opinions mean that these tools are preconfigured to work in a specific way. If your project needs more customization, you can "eject" and customize it, but you will need to maintain this configuration. ```npm run eject``` will expose the configuration for you to customize. Once this is done,  all of the commands except eject will still work.
 
 > Note: this is a one-way operation. Once you run ```npm run eject```, you can’t go back! The supplied configuration is good for most small and medium-sized deployments. Don't feel pressured to use this feature without a good reason.
 
@@ -52,11 +52,15 @@ my-app
 ├── README.md
 ├── node_modules
 ├── package.json
+├── package-lock.json
 ├── .gitignore
 ├── public
 │   └── favicon.ico
 │   └── index.html
 │   └── manifest.json
+│   └── robots.txt
+│   └── logo192.png
+│   └── logo512.png
 └── src
     └── App.css
     └── App.js
@@ -64,7 +68,8 @@ my-app
     └── index.css
     └── index.js
     └── logo.svg
-    └── registerServiceWorker.js
+    └── reportWebVitals.js
+    └── setupTests.js
 ```
 
 ## For the project to build correctly, specific files must exist with *exact* filenames:  
@@ -98,7 +103,6 @@ Your application lives in the *src* directory and you will spend the vast majori
 Webpack has extended the concept of using the **import** statement beyond just including JavaScript files. You can include CSS and Images specific to a component with import statements.
 
 ```javascript
-import React, { Component } from 'react';
 
 // Tell Webpack that our counter component requires the following style sheet
 import './counter.css'; 
@@ -106,7 +110,7 @@ import './counter.css';
 // Tell Webpack that our counter component requires the following image
 import logo from './logo.png';
 
-class Counter extends Component {
+function Counter(props) {
   return (
       <div>
         <img src={logo} alt="Logo" />
@@ -118,4 +122,4 @@ class Counter extends Component {
 }
 
 ```
-> NOTE: To reduce the number of requests to the server, importing images that are less than 10,000 bytes returns a data URI instead of a path. This applies to the following file extensions: bmp, gif, jpg, jpeg, and png. SVG files are excluded. You can think of a data URI as embedding the image directly in the html so it doesn't have to make a request to a server to get it. This can lead to a performance increase in your app load times.
+> NOTE: To reduce the number of requests to the server, importing images that are less than 10,000 bytes returns a data URI instead of a path. This applies to the following file extensions: bmp, gif, jpg, jpeg, and png. SVG files are excluded. You can think of a data URI as embedding the image directly in the HTML so it doesn't have to make a request to a server to get it. This can lead to a performance increase in your app load times.
