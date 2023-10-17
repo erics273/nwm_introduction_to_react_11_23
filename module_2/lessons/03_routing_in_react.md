@@ -4,7 +4,7 @@ Routing allows our single-page-application to change in such a way that it looks
 
 Routing is implemented with a library call `react-router`. React router comes in a few flavors but we will be focusing on `react-router-dom`. This library will give us everything we need to implement Routing into a React web application.
 
-[Official Docs](https://reacttraining.com/react-router/web/example/basic)
+[Official Docs](https://reactrouter.com/en/main)
 
 ## Install react-router-dom
 
