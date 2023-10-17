@@ -26,55 +26,53 @@ src/index.js
 
 ```javascript
 import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
 
 //import browser router so we can use it in our application
 import { BrowserRouter } from "react-router-dom";
 
-//wrap our default App in the BrowserRouter we just imported
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById("root")
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );
 
-serviceWorker.unregister();
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
 ```
 
-Now we need to update App.js with our routes. To declare routes we need to import the **Route** component from react-dom-router.
+Now we need to update App.js with our routes. To declare routes we need to import the **Routes** and **Route** components from react-router-dom.
 
-[Route Documentation](https://reacttraining.com/react-router/web/api/Route)
+[Routes Documentation](https://reactrouter.com/en/main/components/routes)
+[Route Documentation](https://reactrouter.com/en/main/route/route)
 
 src/App.js
 
 ```javascript
-import React, { Component } from "react";
-import Welcome from "./components/welcome/welcome";
-import Clock from "./components/clock/clock";
-import Contact from "./components/contact/contact";
+import { Routes, Route } from 'react-router-dom';
+import Welcome from './components/welcome/Welcome';
+import Clock from './components/clock/Clock'
+import Contact from './components/contact/Contact';
 
-//Import the Route component
-import { Route } from "react-router-dom";
-
-class App extends Component {
-  render() {
-    return (
-      <div>
-        {/* define our routes */}
-        <Route
-          exact
-          path="/"
-          render={(props) => <Welcome {...props} name="eric" />}
-        />
-        <Route path="/clock" component={Clock} />
-        <Route path="/contact" component={Contact} />
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Welcome name="eric" />} />
+        <Route path="/clock" element={<Clock />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
@@ -84,13 +82,11 @@ At this point, you should be able to run our application and see the Welcome Com
 
 ## Create a Navigation Component
 
-Let's create a simple navigation component our users can interact with to access our routes. We will need to import **Link** from react router. We can't use the standard `<a>` tag for a link because it makes a request and causes the browser to reload. **Link** helps us navigate to our routes without reloading the browser.
+Let's create a simple navigation component our users can interact with to access our routes. We will need to import **Link** from React router. We can't use the standard `<a>` tag for a link because it makes a request and causes the browser to reload. **Link** helps us navigate to our routes without reloading the browser.
 
 src/components/navigation/Navigation.js
 
 ```javascript
-import React from "react";
-
 //import Link from react-dom-router
 import { Link } from "react-router-dom";
 
@@ -118,32 +114,25 @@ Now import and display the navigation component in the App component
 src/App.js
 
 ```javascript
-import React, { Component } from "react";
-import Welcome from "./components/welcome/welcome";
-import Clock from "./components/clock/clock";
-import Contact from "./components/contact/contact";
+import { Routes, Route } from 'react-router-dom';
+import Welcome from './components/welcome/Welcome';
+import Clock from './components/clock/Clock'
+import Contact from './components/contact/Contact';
 
-//Import the Navigation component
-import Navigation from "./components/navigation/navigation";
+//import the Navigation component
+import Navigation from './components/navigation/Navigation';
 
-import { Route } from "react-router-dom";
-
-class App extends Component {
-  render() {
-    return (
-      <div>
-        {/* render the Navigation component */}
-        <Navigation />
-        <Route
-          exact
-          path="/"
-          render={(props) => <Welcome {...props} name="eric" />}
-        />
-        <Route path="/clock" component={Clock} />
-        <Route path="/contact" component={Contact} />
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div className="App">
+      <Navigation/>
+      <Routes>
+        <Route path="/" element={<Welcome name="eric" />} />
+        <Route path="/clock" element={<Clock />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
